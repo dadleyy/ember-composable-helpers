@@ -25,21 +25,25 @@ module('Unit | Helper | queue', {
 });
 
 test('it queues functions', function(assert) {
+  let done = assert.async();
   let queued = queue([step1, step2, step3]);
-  queued(2, 4);
-
-  assert.ok(step1.calledOnce, 'step1 called once');
-  assert.ok(step2.calledOnce, 'step2 called once');
-  assert.ok(step3.calledOnce, 'step3 called once');
+  return queued(2, 4).then(() => {
+    assert.ok(step1.calledOnce, 'step1 called once');
+    assert.ok(step2.calledOnce, 'step2 called once');
+    assert.ok(step3.calledOnce, 'step3 called once');
+    done();
+  });
 });
 
 test('it passes all functions the same arguments', function(assert) {
+  let done = assert.async();
   let queued = queue([step1, step2, step3]);
-  queued(2, 4);
-
-  assert.ok(step1.calledWith(2, 4), 'step1 called with correct args');
-  assert.ok(step2.calledWith(2, 4), 'step2 called with correct args');
-  assert.ok(step3.calledWith(2, 4), 'step3 called with correct args');
+  return queued(2, 4).then(() => {
+    assert.ok(step1.calledWith(2, 4), 'step1 called with correct args');
+    assert.ok(step2.calledWith(2, 4), 'step2 called with correct args');
+    assert.ok(step3.calledWith(2, 4), 'step3 called with correct args');
+    done();
+  });
 });
 
 test('it is promise aware', function(assert) {

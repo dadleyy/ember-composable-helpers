@@ -32,17 +32,21 @@ function countArgs(...args) {
 }
 
 test('it pipes functions together', function(assert) {
+  let done = assert.async();
   let piped = pipe([add, square, Math.sqrt]);
-  let result = piped(2, 4);
-
-  assert.equal(result, 6, 'it pipes functions together');
+  piped(2, 4).then(function(result) {
+    done();
+    assert.equal(result, 6, 'it pipes functions together');
+  });
 });
 
 test('first function is variadic, rest are unary', function(assert) {
+  let done = assert.async();
   let piped = pipe([add, square, Math.sqrt, thinger, countArgs]);
-  let result = piped(2, 4);
-
-  assert.equal(result, 1, 'should receive 1 arg for last function');
+  piped(2, 4).then(function(result) {
+    done();
+    assert.equal(result, 1, 'should receive 1 arg for last function');
+  });
 });
 
 test('it is promise aware', function(assert) {
